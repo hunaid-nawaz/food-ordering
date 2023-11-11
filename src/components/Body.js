@@ -1,9 +1,28 @@
 import ResturantCard from "./ResturantCard";
-import resList from "../utils/mockData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Body = () => {
-  const [listOfRestaurants, setListOfRestaurants] = useState(resList);
+  const [listOfRestaurants, setListOfRestaurants] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const data = await fetch(
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.949756&lng=77.6997624&collection=83649&tags=layout_CCS_Biryani&sortBy=&filters=&type=rcv2&offset=0&page_type=null"
+    );
+    const json = await data.json();
+
+    const filteredData = json.data.cards.filter((d) => {
+      return d?.card?.card?.info;
+    });
+    setListOfRestaurants(filteredData);
+  };
+
+  if (listOfRestaurants.length === 0) {
+    return <h1>Loading................</h1>;
+  }
 
   return (
     <div className="body">
@@ -17,7 +36,6 @@ const Body = () => {
               return res.card.card.info.avgRating > 4;
             });
             setListOfRestaurants(filteredResturants);
-            console.log(filteredResturants);
           }}
         >
           {" "}
