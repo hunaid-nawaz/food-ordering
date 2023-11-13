@@ -8,7 +8,6 @@ const Body = () => {
   const [searchText, setSearchText] = useState("");
 
   // Whenever state variabl update, react trigger reconciliation cycle (re-render the component)
-  console.log("Body=============");
   useEffect(() => {
     fetchData();
   }, []);
